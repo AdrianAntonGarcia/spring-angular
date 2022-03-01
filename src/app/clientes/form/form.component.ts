@@ -13,9 +13,9 @@ export class FormComponent implements OnInit {
   cliente: Partial<Cliente> = {};
 
   clienteForm = new FormGroup({
-    nombre: new FormControl('Prueba', [Validators.required]),
-    apellido: new FormControl('apellido', [Validators.required]),
-    email: new FormControl('email', [Validators.required]),
+    nombre: new FormControl('', [Validators.required]),
+    apellido: new FormControl('', [Validators.required]),
+    email: new FormControl('', [Validators.required]),
     createAt: new FormControl(),
   });
 
@@ -25,7 +25,6 @@ export class FormComponent implements OnInit {
 
   onSubmit() {
     this.clienteForm.get('createAt')?.setValue(new Date());
-    console.warn(this.clienteForm.value);
     this.cliente = this.clienteForm.value;
   }
 }
