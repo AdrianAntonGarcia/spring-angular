@@ -18,31 +18,39 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let cliente of clientes">
-          <td>{{ cliente.id }}</td>
-          <td>{{ cliente.nombre }}</td>
-          <td>{{ cliente.apellido }}</td>
-          <td>{{ cliente.email }}</td>
-          <td>{{ cliente.createAt }}</td>
-          <td>
-            <button
-              class="btn btn-warning"
-              [routerLink]="'/crear'"
-              [queryParams]="{ id: cliente.id }"
-            >
-              Modificar
-            </button>
-          </td>
-          <td>
-            <button
-              class="btn btn-danger"
-              (click)="eliminarCliente(cliente.id || 0)"
-            >
-              Eliminar
-            </button>
-          </td>
-        </tr>
+        <ng-container *ngIf="clientes && clientes.length > 0; else NoClientes">
+          <tr *ngFor="let cliente of clientes">
+            <td>{{ cliente.id }}</td>
+            <td>{{ cliente.nombre }}</td>
+            <td>{{ cliente.apellido }}</td>
+            <td>{{ cliente.email }}</td>
+            <td>{{ cliente.createAt }}</td>
+            <td>
+              <button
+                class="btn btn-warning"
+                [routerLink]="'/crear'"
+                [queryParams]="{ id: cliente.id }"
+              >
+                Modificar
+              </button>
+            </td>
+            <td>
+              <button
+                class="btn btn-danger"
+                (click)="eliminarCliente(cliente.id || 0)"
+              >
+                Eliminar
+              </button>
+            </td>
+          </tr>
+        </ng-container>
       </tbody>
     </table>
+
+    <ng-template #NoClientes>
+      <tr>
+        <td class="text-center" colspan="7">No se han econtrado clientes!</td>
+      </tr>
+    </ng-template>
   </div>
 </div>
