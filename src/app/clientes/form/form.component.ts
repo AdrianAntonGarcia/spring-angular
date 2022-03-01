@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Cliente } from '../cliente';
+import { ClienteService } from '../cliente.service';
 
 @Component({
   selector: 'app-form',
@@ -10,7 +12,7 @@ import { Cliente } from '../cliente';
 export class FormComponent implements OnInit {
   titulo: string = '';
 
-  cliente: Partial<Cliente> = {};
+  cliente: Cliente = {};
 
   clienteForm = new FormGroup({
     nombre: new FormControl('', [Validators.required]),
@@ -19,12 +21,15 @@ export class FormComponent implements OnInit {
     createAt: new FormControl(),
   });
 
-  constructor() {}
+  constructor(private clienteService: ClienteService, private router: Router) {}
 
   ngOnInit(): void {}
 
   onSubmit() {
     this.clienteForm.get('createAt')?.setValue(new Date());
     this.cliente = this.clienteForm.value;
+    this.clienteService
+      .create(this.cliente)
+      .subscribe(() => this.router.navigate(['/clientes']));
   }
 }
