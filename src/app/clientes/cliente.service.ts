@@ -53,4 +53,8 @@ export class ClienteService {
       })
     );
   }
+
+  delete(id: number) {
+    return this.http.delete(`${this.urlEndPoint}/clientes/${id}`);
+  }
 }

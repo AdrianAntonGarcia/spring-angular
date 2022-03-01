@@ -14,6 +14,7 @@
           <th>email</th>
           <th>fecha</th>
           <th>Modificar</th>
+          <th>Eliminar</th>
         </tr>
       </thead>
       <tbody>
@@ -29,7 +30,15 @@
               [routerLink]="'/crear'"
               [queryParams]="{ id: cliente.id }"
             >
-              Modificar cliente
+              Modificar
+            </button>
+          </td>
+          <td>
+            <button
+              class="btn btn-danger"
+              (click)="eliminarCliente(cliente.id || 0)"
+            >
+              Eliminar
             </button>
           </td>
         </tr>
