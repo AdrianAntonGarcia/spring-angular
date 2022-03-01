@@ -1,5 +1,5 @@
 <div class="card bg-dark text-white">
-  <div class="card-header">{{ titulo }} {{ cliente | json }}</div>
+  <div class="card-header">{{ titulo }}{{ clienteForm.touched }}</div>
   <div class="card-body">
     <form [formGroup]="clienteForm" (ngSubmit)="onSubmit()">
       <div class="form-group row">
@@ -61,10 +61,10 @@
       <div class="form-group row">
         <div class="col-sm-6 text-center">
           <input
-            [disabled]="!clienteForm.valid"
+            [disabled]="!clienteForm.valid || !clienteForm.touched"
             type="submit"
             class="btn btn-primary"
-            value="Crear cliente"
+            [value]="titulo"
           />
         </div>
       </div>

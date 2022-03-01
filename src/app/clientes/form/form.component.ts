@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Cliente } from '../cliente';
 import { ClienteService } from '../cliente.service';
 import Swal from 'sweetalert2';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-form',
@@ -12,43 +13,86 @@ import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
   styleUrls: ['./form.component.css'],
 })
 export class FormComponent implements OnInit {
-  titulo: string = '';
+  titulo: string = 'Crear cliente';
 
   cliente: Cliente = {};
 
+  buttonDisabled = false;
+
+  modificarCliente = false;
+
   clienteForm = new FormGroup({
+    id: new FormControl(),
     nombre: new FormControl('', [Validators.required]),
     apellido: new FormControl('', [Validators.required]),
     email: new FormControl('', [Validators.required]),
     createAt: new FormControl(),
   });
 
-  constructor(private clienteService: ClienteService, private router: Router) {}
+  constructor(
+    private clienteService: ClienteService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    const idCliente = this.activatedRoute.snapshot.queryParams['id'];
+    if (idCliente) {
+      this.clienteService.getCliente(idCliente).subscribe((cliente) => {
+        this.modificarCliente = true;
+        this.clienteForm.setValue(cliente);
+        this.titulo = 'Modificar cliente';
+        this.clienteForm.markAsPristine();
+        this.clienteForm.markAsUntouched();
+      });
+    }
+  }
 
   onSubmit() {
     this.clienteForm.get('createAt')?.setValue(new Date());
     this.cliente = this.clienteForm.value;
-    this.clienteService.create(this.cliente).subscribe({
-      error: ({ error }: HttpErrorResponse) => {
-        console.log(error.error.message);
-        Swal.fire({
-          title: 'Error! ',
-          text: error.message,
-          icon: 'error',
-          confirmButtonText: 'Cool',
-        });
-      },
-      next: (cliente) => {
-        Swal.fire({
-          title: 'Creado! ' + cliente.nombre,
-          text: 'Do you want to continue',
-          icon: 'success',
-          confirmButtonText: 'Cool',
-        });
-        this.router.navigate(['/clientes']);
-      },
-    });
+    if (!this.modificarCliente) {
+      this.clienteService.create(this.cliente).subscribe({
+        error: ({ error }: HttpErrorResponse) => {
+          console.log(error.error.message);
+          Swal.fire({
+            title: 'Error! ',
+            text: error.message,
+            icon: 'error',
+            confirmButtonText: 'Cool',
+          });
+        },
+        next: (cliente) => {
+          Swal.fire({
+            title: 'Creado! ' + cliente.nombre,
+            text: 'Do you want to continue',
+            icon: 'success',
+            confirmButtonText: 'Cool',
+          });
+          this.router.navigate(['/clientes']);
+        },
+      });
+    } else {
+      this.clienteService.update(this.cliente).subscribe({
+        error: ({ error }: HttpErrorResponse) => {
+          console.log(error.error.message);
+          Swal.fire({
+            title: 'Error! ',
+            text: error.message,
+            icon: 'error',
+            confirmButtonText: 'Cool',
+          });
+        },
+        next: (cliente) => {
+          Swal.fire({
+            title: 'Modificadoo! ' + cliente.nombre,
+            text: 'Do you want to continue',
+            icon: 'success',
+            confirmButtonText: 'Cool',
+          });
+          this.router.navigate(['/clientes']);
+        },
+      });
+    }
   }
 }

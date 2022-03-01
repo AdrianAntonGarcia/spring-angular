@@ -33,4 +33,24 @@ export class ClienteService {
         })
       );
   }
+
+  update(cliente: Cliente): Observable<Cliente> {
+    return this.http
+      .put(this.urlEndPoint + '/clientes/' + cliente.id, cliente, {
+        headers: this.httpHeaders,
+      })
+      .pipe(
+        map((response) => {
+          return response as Cliente;
+        })
+      );
+  }
+
+  getCliente(id: number): Observable<Cliente> {
+    return this.http.get(`${this.urlEndPoint}/clientes/${id}`).pipe(
+      map((response) => {
+        return response as Cliente;
+      })
+    );
+  }
 }
