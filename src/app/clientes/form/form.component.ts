@@ -24,7 +24,7 @@ export class FormComponent implements OnInit {
     id: new FormControl(),
     nombre: new FormControl('', [Validators.required]),
     apellido: new FormControl('', [Validators.required]),
-    email: new FormControl('', [Validators.required]),
+    email: new FormControl('', [Validators.required, Validators.email]),
     createAt: new FormControl(),
   });
 

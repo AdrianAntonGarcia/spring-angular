@@ -43,7 +43,7 @@
       <div class="form-group row">
         <label for="" class="col-form-label col-sm-2">Email</label>
         <div class="col-sm-6">
-          <input type="text" class="form-control" formControlName="email" />
+          <input type="email" class="form-control" formControlName="email" />
         </div>
       </div>
       <div
@@ -56,6 +56,12 @@
           *ngIf="clienteForm.get('email')?.getError('required')"
           class="col-form-label col-sm-12 text-danger"
           >El email es requerido</label
+        >
+        <label
+          *ngIf="clienteForm.get('email')?.getError('email')"
+          class="col-form-label col-sm-12 text-danger"
+        >
+          El formato del email es incorrecto</label
         >
       </div>
       <div class="form-group row">

@@ -28,8 +28,8 @@ export class ClienteService {
         headers: this.httpHeaders,
       })
       .pipe(
-        map((response) => {
-          return response as Cliente;
+        map((response: any) => {
+          return response.cliente as Cliente;
         })
       );
   }
